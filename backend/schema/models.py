@@ -1,0 +1,100 @@
+from typing import Optional
+from sqlalchemy import (
+    BigInteger,
+    ForeignKey,
+    ForeignKeyConstraint,
+    Integer,
+    LargeBinary,
+    String,
+    Text,
+)
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+
+
+class Base(DeclarativeBase):
+    pass
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    userid: Mapped[str] = mapped_column(Text, primary_key=True)
+    passwordhash: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
+    email: Mapped[str] = mapped_column(Text, nullable=False)
+
+    # Relationships
+    past_scores: Mapped[list["UsersPastScore"]] = relationship(
+        back_populates="user"
+    )
+
+
+class Game(Base):
+    __tablename__ = "games"
+
+    gameid: Mapped[int] = mapped_column(Integer, primary_key=True)
+    gamename: Mapped[str] = mapped_column(Text, nullable=False)
+    timelimit: Mapped[Optional[int]] = mapped_column(Integer, server_default="-1")
+    roundmaxscore: Mapped[int] = mapped_column(
+        Integer, nullable=False, server_default="100"
+    )
+    datapath: Mapped[str] = mapped_column(Text, nullable=False)
+
+    # Relationships
+    past_scores: Mapped[list["UsersPastScore"]] = relationship(
+        back_populates="game"
+    )
+
+
+class UsersPastScore(Base):
+    __tablename__ = "users_past_scores"
+
+    userid: Mapped[str] = mapped_column(
+        Text, ForeignKey("users.userid"), primary_key=True
+    )
+    puzzleday: Mapped[str] = mapped_column(Text, primary_key=True)
+    gameid: Mapped[int] = mapped_column(
+        Integer, ForeignKey("games.gameid"), primary_key=True
+    )
+
+    submitted: Mapped[int] = mapped_column(
+        BigInteger, nullable=False, comment="the timestamp"
+    )
+    score: Mapped[Optional[int]] = mapped_column(
+        Integer, server_default="0"
+    )
+
+    # Relationships
+    user: Mapped["User"] = relationship(back_populates="past_scores")
+    game: Mapped["Game"] = relationship(back_populates="past_scores")
+
+
+class PhishingEmail(Base):
+    __tablename__ = "phishing_emails"
+
+    puzzleday: Mapped[str] = mapped_column(Text, primary_key=True)
+    emailtext: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+
+    # Relationships
+    entries: Mapped[list["PhishingEmailEntry"]] = relationship(
+        back_populates="email"
+    )
+
+
+class PhishingEmailEntry(Base):
+    __tablename__ = "phishing_email_entries"
+
+    puzzleday: Mapped[str] = mapped_column(
+        Text, ForeignKey("phishing_emails.puzzleday"), primary_key=True
+    )
+    offsetstart: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        comment="where the section starts in characters (0 = 1st character)",
+    )
+    offsetend: Mapped[int] = mapped_column(
+        Integer, primary_key=True, comment="where the section ends"
+    )
+    explanation: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+
+    # Relationships
+    email: Mapped["PhishingEmail"] = relationship(back_populates="entries")
