@@ -7,6 +7,7 @@ from sqlalchemy import (
     LargeBinary,
     String,
     Text,
+    Boolean
 )
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
@@ -19,8 +20,8 @@ class User(Base):
     __tablename__ = "users"
 
     userid: Mapped[str] = mapped_column(Text, primary_key=True)
-    passwordhash: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
-    email: Mapped[str] = mapped_column(Text, nullable=False)
+    username : Mapped[str] = mapped_column(Text, nullable=False)
+    passwordhash: Mapped[str] = mapped_column(Text, nullable=False)
 
     # Relationships
     past_scores: Mapped[list["UsersPastScore"]] = relationship(
@@ -83,18 +84,21 @@ class PhishingEmail(Base):
 class PhishingEmailEntry(Base):
     __tablename__ = "phishing_email_entries"
 
+    sectionid : Mapped[str] = mapped_column(
+        Text, primary_key=True, nullable=False
+    )
+    
     puzzleday: Mapped[str] = mapped_column(
-        Text, ForeignKey("phishing_emails.puzzleday"), primary_key=True
+        Text, ForeignKey("phishing_emails.puzzleday")
     )
     offsetstart: Mapped[int] = mapped_column(
         Integer,
-        primary_key=True,
         comment="where the section starts in characters (0 = 1st character)",
     )
     offsetend: Mapped[int] = mapped_column(
-        Integer, primary_key=True, comment="where the section ends"
+        Integer, comment="where the section ends"
     )
     explanation: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-
+    isscam : Mapped[bool] = mapped_column(Boolean, default=False)
     # Relationships
     email: Mapped["PhishingEmail"] = relationship(back_populates="entries")
