@@ -6,6 +6,7 @@ interface buttonProp {
   onClick?: () => void;
   colour?: string;
   width?: number;
+  height?: number;
 }
 
 export function RetroButton({
@@ -13,11 +14,13 @@ export function RetroButton({
   onClick,
   colour = "#000000",
   width,
+  height,
 }: buttonProp): React.JSX.Element {
   return (
     <Button
       onClick={onClick}
       sx={{
+        height: height,
         backgroundColor: "#c0c0c0",
         color: colour,
         fontWeight: 'bold',
@@ -40,7 +43,7 @@ export function RetroButton({
           borderBottom: '2px solid #ffffff',
           padding: '5px 15px 3px 17px',
         },
-        width: width
+        width: width, minHeight: 0, minWidth: 0,
       }}
     >
       {children}

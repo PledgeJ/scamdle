@@ -5,6 +5,10 @@ import { RetroButton } from "./RetroButton";
 import { Clock } from "./Clock";
 import { Window } from "./Window"
 
+import { useUser } from '../context/UserContext'
+import { useState, useRef } from "react";
+import Draggable from "react-draggable";
+
 interface barProps {
   title?: string;
   children?: React.ReactNode;
@@ -17,11 +21,18 @@ export function Bars({
   const nav = useNavigate();
 	const page = useLocation().pathname;
 
+  const { user, pinkMode, setPinkMode, logout } = useUser();
+
+  const [showLogin, setShowLogin] = useState<boolean>(false);
+
+  const draggableNodeRef1 = useRef<HTMLDivElement>(null);
+  const draggableNodeRef2 = useRef<HTMLDivElement>(null);
+
   return (
     <Box
       sx={{
         display: 'grid',
-        gridTemplateColumns: { md: '240px 1fr' },
+        gridTemplateColumns: '240px 1fr',
         gridTemplateRows: '100px 1fr 55px',
         gridTemplateAreas: {
           xs: `
@@ -31,21 +42,45 @@ export function Bars({
           `,
         },
         minHeight: '100vh',
+        bgcolor: pinkMode ? '#edc9d7': '',
       }}
     >
+      {(showLogin && page == '/') && (
+        <Draggable nodeRef={draggableNodeRef1} bounds="body" cancel=".no-drag">
+          <Box 
+            ref={draggableNodeRef1}
+            sx={{
+              position: 'fixed',
+              top: '20%',
+              left: '35%',
+              zIndex: 9999,
+              cursor: 'grab',
+              userSelect: 'none',
+              '&:active': {
+                cursor: 'grabbing',
+              },
+            }}
+          >
+            <Window pink={pinkMode} title={"Login"} size={{ h: 350, w: 450 }} close={() => setShowLogin(false)}>
+              <Box className='no-drag'>
+                <Typography>Login</Typography>
+              </Box>
+            </Window>
+          </Box>
+        </Draggable>
+      )}
+
       {/* Header */}
-      <Paper
-        component="header"
-        square
-        elevation={1}
+      <Box
         sx={{
           gridArea: 'header',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           zIndex: (theme) => theme.zIndex.drawer + 1,
+          bgcolor: 'transparent', border: 'none'
         }}
       >
-        <Typography variant="h1">Scamdle</Typography>
-      </Paper>
+        <Typography variant="h1" sx={{  }}>Scamdle</Typography>
+      </Box>
 
       {/* Sidebar */}
       <Paper
@@ -61,19 +96,41 @@ export function Bars({
         <RetroButton onClick={() => nav('/')} width={200} ><Typography sx={{ fontSize: 22 }}>Home</Typography></RetroButton><br/><br/>
         <RetroButton onClick={() => nav('/sms')} width={200} ><Typography sx={{ fontSize: 22 }}>SMS Sort</Typography></RetroButton><br/><br/>
         <RetroButton onClick={() => nav('/phishing')} width={200} ><Typography sx={{ fontSize: 22 }}>Phishing email</Typography></RetroButton><br/><br/>
-        <RetroButton onClick={() => nav('/scam')} width={200} ><Typography sx={{ fontSize: 22 }}>Find the Scam</Typography></RetroButton>
+        <RetroButton onClick={() => nav('/scam')} width={200} ><Typography sx={{ fontSize: 22 }}>Find the Scam</Typography></RetroButton><br/><br/>
+        <RetroButton onClick={() => setPinkMode(!pinkMode)} width={200} ><Typography sx={{ fontSize: 22 }}>PinkMode</Typography></RetroButton><br/><br/>
+
+        {page == '/' && <RetroButton 
+          onClick={() => {
+            if (showLogin) { return }
+            if (user !== undefined) {logout()}
+            
+            setShowLogin(true)
+          }} 
+          width={200}
+        >
+          <Typography sx={{ fontSize: 22 }}>{user !== undefined ? 'Login':'Logout'}</Typography>
+        </RetroButton>}
       </Paper>
 
       {/* Main Content Area */}
-      <Box
-        component="main"
-        sx={{
-          gridArea: 'main',
-          p: 3,
-        }}
-      >
-        <Window title={title}>{children}</Window>
-      </Box>
+      <Draggable nodeRef={draggableNodeRef2} bounds="body" cancel=".no-drag">
+        <Box
+          ref={draggableNodeRef2}
+          sx={{
+            position: 'fixed',
+            top: '13%',
+            left: '17%',
+            zIndex: 9998,
+            cursor: 'grab',
+            userSelect: 'none',
+            '&:active': {
+              cursor: 'grabbing',
+            },
+          }}
+        >
+          <Window pink={pinkMode} title={title}>{children}</Window>
+        </Box>
+      </Draggable>
 
       {/* Taskbar */}
       <Paper

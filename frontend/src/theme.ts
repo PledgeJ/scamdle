@@ -3,7 +3,7 @@ import './assets/fonts/fonts.css';
 
 export const theme = createTheme({
   typography: {
-    fontFamily: '"w95fa", "MS Sans Serif", Tahoma, sans-serif',
+    fontFamily: '"w95fa", Tahoma, sans-serif',
   },
   components: {
     MuiCssBaseline: {
