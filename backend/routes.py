@@ -3,6 +3,7 @@ import datetime
 import sqlite3 
 import phishing
 import sms
+import scamdle
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session 
@@ -48,12 +49,28 @@ def submit_daily_email(payload : phishing.PhishingScorePayload, db : Session = D
     phishing.submit_result(db, payload, puzzleday)
 
 
-@app.get("api/sms/daily")
+@app.get("/api/sms/daily")
 def get_daily_sms():
-    currentDay = datetime.datetime.now(datetime.timezone.utc).replace(
+    puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
         hour=0, minute=0, second=0, microsecond=0)
-    images = sms.uploadImages(currentDay)
+    texts = sms.uploadImages(str(puzzleday)[0:10])
     return {
-        "puzzleday" : currentDay,
-        "images" : images
+        "puzzleday" : puzzleday.timestamp(),
+        "textData" : texts
+    }
+
+@app.get("/api/whichscam/daily")
+def get_daily_scam():
+    puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
+            hour=0, minute=0, second=0, microsecond=0)
+    name, desc, unexp, urg, impe, unus, good = scamdle.genScamOfTheDay()
+    return {
+        "puzzleday" : puzzleday.timestamp(),
+        "name": name,
+        "desc" : desc,
+        "unexpected" : unexp,
+        "urgency" : urg,
+        "impersonation" : impe,
+        "unusualPayment" : unus,
+        "toogood" : good
     }
