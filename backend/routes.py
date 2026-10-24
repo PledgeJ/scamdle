@@ -67,5 +67,5 @@ def get_daily_sms():
 
     return {
         "puzzleday" : currentDay,
-        "images" : sms.uploadImages(currentDay)
+        "images" : images
     }
