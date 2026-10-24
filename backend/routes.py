@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends
 import datetime
 import sqlite3 
 import phishing
+import sms
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session 
@@ -45,3 +46,17 @@ def submit_daily_email(payload : phishing.PhishingScorePayload, db : Session = D
         hour=0, minute=0, second=0, microsecond=0)
     
     phishing.submit_result(db, payload, puzzleday)
+
+
+@app.get("api/sms/daily")
+def get_daily_sms():
+    currentDay = datetime.datetime.now(datetime.timezone.utc).replace(
+        hour=0, minute=0, second=0, microsecond=0)
+    images = sms.uploadImages(currentDay)
+    return {
+        "puzzleday" : currentDay,
+        "img" : images.imgFile,
+        "isScam" : images.isScam,
+        "reason1" : images.reason1,
+        "reason2" : images.reason2
+    }
