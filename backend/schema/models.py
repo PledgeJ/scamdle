@@ -20,8 +20,8 @@ class User(Base):
     __tablename__ = "users"
 
     userid: Mapped[str] = mapped_column(Text, primary_key=True)
-    passwordhash: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
-    email: Mapped[str] = mapped_column(Text, nullable=False)
+    username : Mapped[str] = mapped_column(Text, nullable=False)
+    passwordhash: Mapped[str] = mapped_column(Text, nullable=False)
 
     # Relationships
     past_scores: Mapped[list["UsersPastScore"]] = relationship(

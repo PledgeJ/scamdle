@@ -1,7 +1,7 @@
 CREATE TABLE users ( 
     userid TEXT primary key not null, 
-    passwordhash blob not null, 
-    email TEXT not null
+    username TEXT not null, 
+    passwordhash TEXT not null 
 );
 
 CREATE TABLE users_past_scores ( 
@@ -23,11 +23,12 @@ CREATE TABLE games (
 );
 
 CREATE TABLE phishing_email_entries ( 
+    sectionid TEXT not null primary key,
     puzzleday TEXT not null, 
     offsetstart INTEGER not null, -- where the section starts in characters (0 = 1st character)
     offsetend INTEGER not null,  -- where the section ends 
     explanation TEXT,
-    primary key (puzzleday, offsetstart, offsetend)
+    isscam BOOLEAN default FALSE
 );
 
 CREATE TABLE phishing_emails ( 
