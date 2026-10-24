@@ -9,11 +9,8 @@ import os
 
 import phishing
 import sms
-<<<<<<< HEAD
 import scamdle
-=======
 import auth 
->>>>>>> a214824d79ac0ba585836dd5217834365e66c078
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session 
@@ -78,6 +75,7 @@ def submit_daily_email(request : Request, sectionuid : str, db : Session = Depen
         
     return { 
         "correct" : is_correct, 
+        "explanation" : phishing.get_explanation(db, sectionuid),
         "done" : phishing.get_correct_count(db, puzzleday) == len(current_correct_ids) 
     }
 

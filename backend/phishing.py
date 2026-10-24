@@ -48,3 +48,7 @@ def get_correct_count(db : Session, puzzleday : datetime.date) -> int:
              .where(models.PhishingEmailEntry.puzzleday == puzzleday.strftime("%Y-%m-%d"))
              .count())
     
+def get_explanation(db : Session, sectionuid : str): 
+    return db.scalars(select(models.PhishingEmailEntry.explanation)
+            .where(models.PhishingEmailEntry.sectionid == sectionuid)
+            ).one()
