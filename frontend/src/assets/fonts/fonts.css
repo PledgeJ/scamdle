@@ -1,0 +1,8 @@
+@font-face {
+  font-family: 'w95fa';
+  src: url('./w95f.woff2') format('woff2'),
+       url('./w95f.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
