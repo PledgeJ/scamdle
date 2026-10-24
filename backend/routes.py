@@ -55,8 +55,5 @@ def get_daily_sms():
     images = sms.uploadImages(currentDay)
     return {
         "puzzleday" : currentDay,
-        "img" : images.imgFile,
-        "isScam" : images.isScam,
-        "reason1" : images.reason1,
-        "reason2" : images.reason2
+        "images" : images
     }
