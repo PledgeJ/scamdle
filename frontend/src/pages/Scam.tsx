@@ -4,7 +4,7 @@ import { Bars } from "../components/Bars";
 
 export function Scam(): React.JSX.Element {
   return (
-    <Bars>
+    <Bars title="Find the scam">
       <Typography>
         SCAM
       </Typography>

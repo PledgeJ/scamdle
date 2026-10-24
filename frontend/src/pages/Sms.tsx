@@ -4,7 +4,7 @@ import { Bars } from "../components/Bars";
 
 export function SMS(): React.JSX.Element {
   return (
-    <Bars>
+    <Bars title='SMS Sort'>
       <Typography>
         SMS
       </Typography>

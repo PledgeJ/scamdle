@@ -4,7 +4,7 @@ import { Typography } from "@mui/material";
 
 export function Home(): React.JSX.Element {
   return (
-     <Bars>
+     <Bars title="Welcome">
         <Typography>
           Home
         </Typography>

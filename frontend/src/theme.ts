@@ -45,7 +45,7 @@ export const theme = createTheme({
           margin: 0;
           padding: 0;
           background-color: var(--bg) !important;
-          color: var(--text);
+          color: #000000;
         }
 
         h1 {

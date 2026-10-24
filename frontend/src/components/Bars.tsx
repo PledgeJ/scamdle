@@ -3,6 +3,7 @@ import type React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { RetroButton } from "./RetroButton";
 import { Clock } from "./Clock";
+import { Window } from "./Window"
 
 interface barProps {
   title?: string;
@@ -71,7 +72,7 @@ export function Bars({
           p: 3,
         }}
       >
-        {children}
+        <Window title={title}>{children}</Window>
       </Box>
 
       {/* Taskbar */}
@@ -103,6 +104,12 @@ export function Bars({
               <Typography sx={{ fontSize: 22 }}>Start</Typography>
             </Box>
           </RetroButton><br/><br/>
+
+          {(page == '/') && 
+            <RetroButton width={250}>
+              <Typography sx={{ fontSize: 22, width: '100%', textAlign: 'left' }}>Welcome</Typography>
+            </RetroButton>
+          }
 
           {(page == '/' || page == '/sms') && 
             <RetroButton width={250}>
