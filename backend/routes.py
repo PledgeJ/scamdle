@@ -28,11 +28,11 @@ engine = create_engine(
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Oauth2Scheme = OAuth2PasswordBearer(tokenUrl="/api/login")
-#origins = []
+origins = ["*"]
 
 app = FastAPI()
 app.add_middleware(SessionMiddleware, str(os.urandom(32)))
-#app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 class RegisterPayload(BaseModel):
     username : str 
     password : str 
