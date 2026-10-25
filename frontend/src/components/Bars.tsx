@@ -24,7 +24,7 @@ export function Bars({
   const nav = useNavigate();
 	const page = useLocation().pathname;
 
-  const { user, pinkMode, setPinkMode, logout } = useUser();
+  const { user, pinkMode, setPinkMode } = useUser();
 
   const [showLogin, setShowLogin] = useState<boolean>(false);
   const [showMain, setShowMain] = useState<boolean>(true);

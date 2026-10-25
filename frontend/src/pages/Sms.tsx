@@ -68,13 +68,40 @@ export function SMS(): React.JSX.Element {
 
   if (isLoading || !data || error) {
     return (
-      <Bars title="SMS Sort" size={{ h: 780, w: 600 }}>
-        <Box sx={{ width: '100%', mt: 3, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {(isLoading || (!data && !error)) && <Typography>Loading...</Typography>}
-          {error && <Typography>Error loading game: {error}</Typography>}
-        </Box>
-      </Bars>
-    );
+    <Bars title="SMS Sort" size={{ h: 780, w: 600 }}>
+      <Box sx={{ mt: 5, height: 620, overflowY: 'auto' }}>
+          {error && <>
+            <MessageBubble message={"There's been an error loading the game"} />
+            <MessageBubble right message={"What's the error?"} />
+            <MessageBubble message={error}/>
+          </>}
+
+          {isLoading && <>
+            <MessageBubble message={"The game is taking a long time to load huh"} />
+            <MessageBubble right message={"Damn, there might be something wrong with it"} />
+          </>}
+      </Box>
+
+      {/*  Buttons */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
+        <RetroButton
+          onClick={() => handleGuess(true)}
+          disabled
+          width={200}
+        >
+          <Typography sx={{ fontSize: 22 }}>Scam</Typography>
+        </RetroButton>
+
+        <RetroButton
+          onClick={() => handleGuess(false)}
+          disabled
+          width={200}
+        >
+          <Typography sx={{ fontSize: 22 }}>Legit</Typography>
+        </RetroButton>
+      </Box>
+    </Bars>
+  )
   }
 
   const handleGuess = (guessedScam: boolean) => {
