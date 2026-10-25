@@ -105,8 +105,23 @@ def get_daily_scam(db : Session = Depends(get_db)):
         "unusualPayment" : unus,
         "toogood" : good
     }
-
-    
+'''
+@app.get("/api/whichscam/verify")
+def verify_daily_scam(db : Session = Depends(get_db)):
+    puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
+            hour=0, minute=0, second=0, microsecond=0)
+    name, desc, unexp, urg, impe, unus, good = scamdle.getScamOfTheDayTemp(db, str(puzzleday)[0:10])
+    return {
+        "puzzleday" : puzzleday.timestamp(),
+        "name": name,
+        "desc" : desc,
+        "unexpected" : unexp,
+        "urgency" : urg,
+        "impersonation" : impe,
+        "unusualPayment" : unus,
+        "toogood" : good
+    }
+    '''
     
 @app.post("/api/login")
 def login(form_data : Annotated[OAuth2PasswordRequestForm, Depends()], db : Session = Depends(get_db)):
