@@ -139,10 +139,10 @@ def get_daily_sms():
     }
 
 @app.get("/api/whichscam/daily")
-def get_daily_scam():
+def get_daily_scam(db : Session = Depends(get_db)):
     puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
             hour=0, minute=0, second=0, microsecond=0)
-    name, desc, unexp, urg, impe, unus, good = scamdle.genScamOfTheDay()
+    name, desc, unexp, urg, impe, unus, good = scamdle.getScamOfTheDayTemp(db, str(puzzleday)[0:10])
     return {
         "puzzleday" : puzzleday.timestamp(),
         "name": name,

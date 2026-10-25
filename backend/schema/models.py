@@ -130,3 +130,56 @@ class DailyProgress(Base):
 
     # Unique section ID of the clicked word/section
     sectionuid: Mapped[str] = mapped_column(String)
+
+
+class Sms(Base):
+    __tablename__ = "sms"
+
+    smsis : Mapped[int] = mapped_column(
+        Integer, primary_key=True, nullable=False
+    )
+    dayid : Mapped[str] = mapped_column(
+        Text, nullable=False
+    )
+    isscam: Mapped[bool] = mapped_column(
+        Boolean, nullable=False
+    )
+    reason1: Mapped[str] = mapped_column(
+        Text, nullable=False
+    )
+    reason2: Mapped[str] = mapped_column(
+       Text
+    )
+    message: Mapped[str] = mapped_column(
+        Text, nullable=False
+    )
+
+
+class Scamdle(Base):
+    __tablename__ = "scamdle"
+
+
+    date : Mapped[str] = mapped_column(
+        Text, primary_key=True, nullable=False
+    )
+    name : Mapped[str] = mapped_column(
+        Text, nullable=False
+    )
+    desc : Mapped[str] = mapped_column(
+        Text, nullable=False
+    )
+    unexpected : Mapped[bool] = mapped_column(
+        Boolean, nullable=False
+    )
+    urgency : Mapped[bool] = mapped_column(
+        Boolean, nullable=False
+    )
+    impersonation : Mapped[bool] = mapped_column(
+        Boolean, nullable=False
+    )
+    unusualpayment : Mapped[bool] = mapped_column(
+        Boolean, nullable=False
+    )
+    toogood : Mapped[bool] = mapped_column(
+        Boolean, nullable=False
+    )
