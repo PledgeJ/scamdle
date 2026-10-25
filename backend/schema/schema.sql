@@ -35,3 +35,22 @@ CREATE TABLE phishing_emails (
     puzzleday TEXT primary key not null, 
     emailtext TEXT
 );
+
+CREATE TABLE sms (
+    smsid INTEGER primary key not null,
+    dayid TEXT not null,
+    isscam BOOLEAN not null,
+    reason1 TEXT,
+    reason2 TEXT,
+    message TEXT
+);
+
+CREATE TABLE scamdle (
+    name TEXT,
+    desc TEXT,
+    unexpected BOOLEAN,
+    urgency BOOLEAN,
+    impersonation BOOLEAN,
+    unusualpayment BOOLEAN,
+    toogood BOOLEAN
+);
