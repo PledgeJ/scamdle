@@ -20,6 +20,8 @@ Dylan Brett - []()
 
 Chinonso Oti - [github.com/chinooti](https://github.com/chinooti)
 
+George Barfield - []()
+
 # Contact
 
 Interested in taking Scamdle to the next level, reporting a bug or asking a question? You can contact us by sending an email to <email@somewhere.com>. 
