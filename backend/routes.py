@@ -75,6 +75,7 @@ def submit_daily_email(request : Request, sectionuid : str, db : Session = Depen
         
     return { 
         "correct" : is_correct, 
+        "explanation" : phishing.get_explanation(db, sectionuid),
         "done" : phishing.get_correct_count(db, puzzleday) == len(current_correct_ids) 
     }
 
