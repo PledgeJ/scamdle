@@ -43,7 +43,7 @@ class Game(Base):
     # Relationships
     past_scores: Mapped[list["UsersPastScore"]] = relationship(
         back_populates="game"
-    )
+    )   
 
 
 class UsersPastScore(Base):
@@ -102,3 +102,31 @@ class PhishingEmailEntry(Base):
     isscam : Mapped[bool] = mapped_column(Boolean, default=False)
     # Relationships
     email: Mapped["PhishingEmail"] = relationship(back_populates="entries")
+    
+class DailyProgress(Base):
+    __tablename__ = "daily_progress"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    
+    # Optional foreign key to User model
+    user_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("users.userid"), 
+        nullable=True, 
+        index=True
+    )
+
+    # Optional UUID string for anonymous cookie sessions
+    player_id: Mapped[Optional[str]] = mapped_column(
+        String, 
+        nullable=True, 
+        index=True
+    )
+
+    # Date of the puzzle submission
+    game_date: Mapped[str] = mapped_column(
+        Text, 
+        index=True
+    )
+
+    # Unique section ID of the clicked word/section
+    sectionuid: Mapped[str] = mapped_column(String)
