@@ -49,7 +49,6 @@ export function Home(): React.JSX.Element {
   if ((isLoading || error)) {
     return (
       <Bars title="Welcome" size={{w: 950, h: 550}}>
-        <Typography>ERROR</Typography>
       </Bars>
     )
   }

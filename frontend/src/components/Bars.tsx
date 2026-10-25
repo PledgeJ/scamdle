@@ -27,6 +27,7 @@ export function Bars({
   const { user, pinkMode, setPinkMode, logout } = useUser();
 
   const [showLogin, setShowLogin] = useState<boolean>(false);
+  const [showMain, setShowMain] = useState<boolean>(true);
 
   const draggableNodeRef1 = useRef<HTMLDivElement>(null);
   const draggableNodeRef2 = useRef<HTMLDivElement>(null);
@@ -99,21 +100,47 @@ export function Bars({
         }}
       >
         <Box sx={{display: 'flex', flexDirection: 'column'}}>
-          <DesktopIcon text="Home" onClick={() => nav('/')} iconPath={"/computer.png"} iconSize={{h: 90, w:90}}/>
-          <Box sx={{mb: 16}}><DesktopIcon text="SMS Sort" onClick={() => nav('/sms')} iconPath={"/msn.png"} iconSize={{h: 80, w:80}}/></Box>
-          <DesktopIcon text="Email" onClick={() => nav('/phishing')} iconPath={"/email.png"} iconSize={{h: 90, w:90}}/> 
+          <DesktopIcon 
+            text="Home" 
+            onClick={() => {
+              if (page === '/') setShowMain(true)
+              else nav('/')
+            }} 
+            iconPath={"/computer.png"} iconSize={{h: 90, w:90}}
+          />
+          <Box sx={{mb: 16}}><DesktopIcon 
+            text="SMS Sort" 
+            onClick={() => {
+              if (page === '/sms') setShowMain(true)
+              else nav('/sms')
+            }} 
+            iconPath={"/msn.png"} iconSize={{h: 80, w:80}}
+          /></Box>
+          <DesktopIcon 
+            text="Email" 
+            onClick={() => {
+              if (page === '/phishing') setShowMain(true)
+              else nav('/phishing')
+            }} 
+            iconPath={"/email.png"} iconSize={{h: 90, w:90}}
+          /> 
           <DesktopIcon text="Super secret pink mode of joy and whimsy" onClick={() => setPinkMode(!pinkMode)} iconPath={"/book.png"} iconSize={{h: 110, w:110}}/>
         </Box>
         <Box sx={{display: 'flex', flexDirection: 'column', gap: 17, mt: 1}}>
-          <DesktopIcon text="Scamdle" onClick={() => nav('/scam')} iconPath={"/scamdle.png"} iconSize={{h: 80, w:80}}/> 
+          <DesktopIcon 
+            text="Scamdle" 
+            onClick={() => {
+              if (page === '/scam') setShowMain(true)
+              else nav('/scam')
+            }} 
+            iconPath={"/scamdle.png"} iconSize={{h: 80, w:80}}
+          /> 
 
           <DesktopIcon 
             iconPath="/agent.png"
             text={user !== undefined ? 'Login':'Logout'}
             onClick={() => {
               if (showLogin) { return }
-              if (user !== undefined) {logout()}
-              
               setShowLogin(true)
             }} 
             iconSize={{h: 80, w:80}}
@@ -122,7 +149,7 @@ export function Bars({
       </Paper>
 
       {/* Main Content Area */}
-      <Draggable nodeRef={draggableNodeRef2} bounds="body" cancel=".no-drag">
+      {showMain && <Draggable nodeRef={draggableNodeRef2} bounds="body" cancel=".no-drag">
         <Box
           ref={draggableNodeRef2}
           sx={{
@@ -139,9 +166,9 @@ export function Bars({
             },
           }}
         >
-          <Window pink={pinkMode} title={title} size={{h: size.h, w: size.w}}><Box sx={{cursor: 'default', height: '65vh'}} className="no-drag">{children}</Box></Window>
+          <Window pink={pinkMode} title={title} size={{h: size.h, w: size.w}} close={() => setShowMain(false)}><Box sx={{cursor: 'default', height: '65vh'}} className="no-drag">{children}</Box></Window>
         </Box>
-      </Draggable>
+      </Draggable>}
 
       {/* Taskbar */}
       <Paper
@@ -173,27 +200,27 @@ export function Bars({
             </Box>
           </RetroButton><br/><br/>
 
-          {(page == '/') && 
+          {(page == '/' && showMain) && 
             <RetroButton width={250}>
               <Typography sx={{ fontSize: 22, width: '100%', textAlign: 'left' }}>Welcome</Typography>
             </RetroButton>
           }
 
-          {(page == '/' || page == '/sms') && 
+          {(page == '/sms' && showMain) && 
             <RetroButton width={250}>
-              <Typography sx={{ fontSize: 22, width: '100%', textAlign: 'left' }}>SMS Sort {page == '/' && ' popup'}</Typography>
+              <Typography sx={{ fontSize: 22, width: '100%', textAlign: 'left' }}>SMS Sort</Typography>
             </RetroButton>
           }
 
-          {(page == '/' || page == '/phishing') && 
+          {(page == '/phishing' && showMain) && 
             <RetroButton width={250}>
-              <Typography sx={{ fontSize: 22, width: '100%', textAlign: 'left' }}>Phishing email {page == '/' && ' ad'}</Typography>
+              <Typography sx={{ fontSize: 22, width: '100%', textAlign: 'left' }}>Phishing email</Typography>
             </RetroButton>
           }
 
-          {(page == '/' || page == '/scam') && 
+          {(page == '/scam' && showMain) && 
             <RetroButton width={250}>
-              <Typography sx={{ fontSize: 22, width: '100%', textAlign: 'left' }}>Scamdle{page == '/' && ' bloat'}</Typography>
+              <Typography sx={{ fontSize: 22, width: '100%', textAlign: 'left' }}>Scamdle</Typography>
             </RetroButton>
           }
         </Box>
