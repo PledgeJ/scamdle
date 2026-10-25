@@ -2,6 +2,9 @@
 
 from pydantic import BaseModel
 from datetime import datetime, timedelta
+from sqlalchemy.orm import Session 
+from sqlalchemy import select
+import schema.models
 import random
 
 class scam(BaseModel):
@@ -83,8 +86,16 @@ SCAMS = {
               unexpected = True, urgency = True, impersonation = True, unusualPayment = True, toogood = False),
 }
 
+def addScams(db: Session):
+    for item in SCAMS:
+        db.add(item)
+
+
+
 def getScamOfTheDay(currentDay):
     scamid = currentDay       
     return SCAMS[scamid].name,  SCAMS[scamid].desc, SCAMS[scamid].unexpected, SCAMS[scamid].urgency, SCAMS[scamid].impersonation, SCAMS[scamid].unusualPayment, SCAMS[scamid].toogood
 
 
+def getScamOfTheDayTemp(db: Session, currentDay: str):
+    return (db.scalars(select(schema.models.Scamdle).where(schema.models.Scamdle.date == currentDay))) 
