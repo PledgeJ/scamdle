@@ -146,7 +146,7 @@ def get_daily_sms(db : Session = Depends(get_db)):
 def get_daily_scam(db : Session = Depends(get_db)):
     puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
             hour=0, minute=0, second=0, microsecond=0)
-    model = scamdle.getScamOfTheDayTemp(db, str(puzzleday)[0:10])
+    model = scamdle.getScamOfTheDay(db, str(puzzleday)[0:10])
     return {
         "puzzleday" : puzzleday.timestamp(),
         "name": model.scamname,
@@ -161,13 +161,14 @@ def get_daily_scam(db : Session = Depends(get_db)):
 def getScam(db : Session = Depends(get_db)):
     puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
                 hour=0, minute=0, second=0, microsecond=0)
-    model = scamdle.getScamOfTheDayTemp(db, str(puzzleday)[0:10])
+    model = scamdle.getScamOfTheDay(db, str(puzzleday)[0:10])
 
     return model
 
 
     
-#Given Guess is the string variable passed to us, which will always be the exact wording of a Scam from the capital one scam list: https://www.capitalone.com/help-center/fraud-disputes/common-scam-types/ 
+#Given Guess is the string variable passed to us, which will always be the exact wording of a Scam from the 
+# capital one scam list: https://www.capitalone.com/help-center/fraud-disputes/common-scam-types/ 
 '''
 @app.get("/api/whichscam/verify")
 def verify_daily_scam(givenGuess):
