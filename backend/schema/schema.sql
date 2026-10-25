@@ -36,6 +36,20 @@ CREATE TABLE phishing_emails (
     emailtext TEXT
 );
 
+CREATE TABLE IF NOT EXISTS daily_progress (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NULL,
+    player_id TEXT NULL,
+    game_date TEXT NOT NULL,
+    sectionuid TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS ix_daily_progress_id ON daily_progress (id);
+CREATE INDEX IF NOT EXISTS ix_daily_progress_user_id ON daily_progress (user_id);
+CREATE INDEX IF NOT EXISTS ix_daily_progress_player_id ON daily_progress (player_id);
+CREATE INDEX IF NOT EXISTS ix_daily_progress_game_date ON daily_progress (game_date);
+
 CREATE TABLE sms (
     smsid INTEGER primary key not null,
     dayid TEXT not null,
