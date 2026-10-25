@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import React, { Fragment } from "react";
 import { Bars } from "../components/Bars";
 import { useEffect, useState } from "react";
-import { checkSection, getDaily, type dailyEmail, type Section, type SectionCheck } from "../services/phishing.api";
+import { checkSection, getDailyEmail, type dailyEmail, type Section, type SectionCheck } from "../services/phishing.api";
 import { useUser } from "../context/UserContext";
 import { requestID } from "../services/login.api";
 
@@ -33,7 +33,11 @@ export function Phishing(): React.JSX.Element {
           key={section.id}
           component="span"
           onClick={ async () => {
-            if (done || clicked[section.id]) { return }
+            if (done || clicked[section.id]) 
+            { 
+              setLast(section.id)
+              return
+            }
 
             const res: SectionCheck = await checkSection(section.id, user)
             console.log(res)
@@ -50,7 +54,7 @@ export function Phishing(): React.JSX.Element {
           }}
           sx={{
             cursor: clicked[section.id] ? 'default' : 'pointer',
-            '&:hover': { backgroundColor: clicked[section.id] ? '' : 'yellow' },
+            '&:hover': { backgroundColor: clicked[section.id] ? 'gray' : 'yellow' },
             color: clicked[section.id]?.correct == true ? 'green' : clicked[section.id]?.correct == false ? 'red' : 'black'
           }}
         >
@@ -63,9 +67,8 @@ export function Phishing(): React.JSX.Element {
   }
 
   useEffect(() => {
+    if (user !== '') return
     let isMounted = true;
-
-    if (user != '') return
 
     const loadInitialData = async () => {
       setIsLoading(true);
@@ -76,6 +79,7 @@ export function Phishing(): React.JSX.Element {
         if (isMounted) {
           setUser(userRes.id)
         }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         if (isMounted) {
           setError(err.message || 'An error occurred while loading data');
@@ -102,7 +106,7 @@ export function Phishing(): React.JSX.Element {
       setError(null);
 
       try {
-        const result = await getDaily();
+        const result = await getDailyEmail();
         if (isMounted) {
           setData(result);
         }
@@ -149,7 +153,7 @@ export function Phishing(): React.JSX.Element {
   const chunks = createText(data.sections, data.mail)
 
   return (
-    <Bars title="Phishing email">
+    <Bars title="Phishing email" size={{h: '77vh', w: '95%'}}>
 
       <Box
         sx={{
@@ -159,7 +163,7 @@ export function Phishing(): React.JSX.Element {
         <Typography
           variant="body1"
           sx={{
-            fontSize: '1.15rem',
+            fontSize: '20px',
             lineHeight: 1.6, pt: 1
           }}
         >To: You</Typography>
@@ -167,7 +171,7 @@ export function Phishing(): React.JSX.Element {
         <Typography
           variant="body1"
           sx={{
-            fontSize: '1.15rem',
+            fontSize: '20px',
             lineHeight: 1.6, mb: 2
           }}
         >From: {chunks[0]}</Typography>
@@ -175,21 +179,23 @@ export function Phishing(): React.JSX.Element {
         <Typography
           variant="body1"
           sx={{
-            fontSize: '1.6rem',
+            fontSize: '22px',
             lineHeight: 1.6, mb: 1
           }}
         >Subject: {chunks[1]}</Typography>
       </Box>
       <Box
         sx={{
-          boxShadow: '1px 1px 0px #808080 inset, -1px -1px 0px #808080 inset', height: '25vh', px: 2, py: 1, bgcolor: "white"
+          boxShadow: '1px 1px 0px #808080 inset, -1px -1px 0px #808080 inset', height: '55%', px: 2, py: 1, bgcolor: "white"
         }}
       >
         <Typography
           variant="body1"
           sx={{
-            fontSize: '1.15rem',
+            fontSize: '20px',
             lineHeight: 1.6,
+            overflowY: 'scroll',
+            height: '100%'
           }}
         >
           {chunks.slice(2).map((chunk, index) => (
@@ -204,7 +210,8 @@ export function Phishing(): React.JSX.Element {
         variant="body1"
         sx={{
           fontSize: '1rem',
-          lineHeight: 1.6, mt: 1, ml: 0.5
+          lineHeight: 1.6, mt: 1, ml: 0.5,
+          color: clicked[lastAdded]?.correct === true ? 'green' : clicked[lastAdded]?.correct === false ? 'red' : 'black'
         }}
       >
         {clicked[lastAdded]?.correct === true ? 'Correct:' : clicked[lastAdded]?.correct === false ? 'Incorrect:' : 'Click the section that you think is a red flag'}{' '}
@@ -218,7 +225,7 @@ export function Phishing(): React.JSX.Element {
           lineHeight: 1.6, mt: 1, ml: 0.5
         }}
       >
-        {done && "COMPLETE! Well done"}
+        {done ? "COMPLETE! Well done" : "Still a couple more red flags to go..."}
       </Typography>
     </Bars>
   )

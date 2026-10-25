@@ -1,4 +1,4 @@
-const socket = 'http://127.0.0.1:8000'
+const socket = 'http://10.238.9.13:8000'
 const FETCH_URL = '/api/phishing/daily'
 
 const CHECK_URL = '/api/phishing/submit/'
@@ -16,7 +16,7 @@ export interface dailyEmail {
   sections: Section[]
 }
 
-export async function getDaily(): Promise<dailyEmail> {
+export async function getDailyEmail(): Promise<dailyEmail> {
     const res = await fetch(socket+FETCH_URL)
 
     if (!res.ok) {

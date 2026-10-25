@@ -7,16 +7,17 @@ import { requestID } from "../services/login.api";
 import { useUser } from "../context/UserContext";
 
 export function Home(): React.JSX.Element {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const { user, setUser } = useUser();
 
   useEffect(() => {
+    if (user !== '') {
+      return
+    }
+
     let isMounted = true;
-
-    if (user != '') return
-
     const loadInitialData = async () => {
       setIsLoading(true);
       setError(null);
@@ -26,6 +27,7 @@ export function Home(): React.JSX.Element {
         if (isMounted) {
           setUser(userRes.id)
         }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         if (isMounted) {
           setError(err.message || 'An error occurred while loading data');
@@ -44,7 +46,7 @@ export function Home(): React.JSX.Element {
     };
   }, [])
 
-  if (isLoading || error) {
+  if ((isLoading || error)) {
     return (
       <Bars title="Welcome" size={{w: 950, h: 550}}>
         <Typography>ERROR</Typography>

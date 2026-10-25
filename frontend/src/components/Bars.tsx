@@ -53,6 +53,8 @@ export function Bars({
           <Box 
             ref={draggableNodeRef1}
             sx={{
+              width: 'fit-Content',
+              height: 'fit-Content',
               position: 'fixed',
               top: '20%',
               left: '35%',
@@ -122,6 +124,8 @@ export function Bars({
           ref={draggableNodeRef2}
           sx={{
             position: 'fixed',
+            width: 'fit-Content',
+            height: 'fit-Content',
             top: '13%',
             left: '17%',
             zIndex: 9998,

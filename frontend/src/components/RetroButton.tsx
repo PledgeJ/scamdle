@@ -7,6 +7,7 @@ interface buttonProp {
   colour?: string;
   width?: number;
   height?: number;
+  disabled?: boolean;
 }
 
 export function RetroButton({
@@ -15,9 +16,11 @@ export function RetroButton({
   colour = "#000000",
   width,
   height,
+  disabled=false,
 }: buttonProp): React.JSX.Element {
   return (
     <Button
+      disabled={disabled}
       onClick={onClick}
       sx={{
         height: height,
