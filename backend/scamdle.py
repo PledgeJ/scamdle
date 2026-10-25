@@ -87,12 +87,20 @@ SCAMS = {
               unexpected = True, urgency = True, impersonation = True, unusualpayment = True, toogood = False),
 }
 
+def ensureTableExists(db: Session):
+    if db.query(schema.models.Scamdle).count() == 0:
+            addScams(db)
+
+
 def addScams(db: Session):
     for scamid in SCAMS:
         db.add(SCAMS[scamid])
     db.commit()
 
 def getScamOfTheDay(db: Session, currentDay: str):
-    if db.query(schema.models.Scamdle).count() == 0:
-        addScams(db)
+    ensureTableExists(db)
     return (db.scalars(select(schema.models.Scamdle).where(schema.models.Scamdle.thedate == currentDay)).first()) 
+
+def getScamFromName(db: Session, givenGuess: str):
+    ensureTableExists(db)
+    return (db.scalars(select(schema.models.Scamdle).where(schema.models.Scamdle.scamname == givenGuess)).first())
