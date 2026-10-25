@@ -108,23 +108,57 @@ def get_daily_scam(db : Session = Depends(get_db)):
         "unusualPayment" : model.unusualpayment,
         "toogood" : model.toogood
     }
+
+def getScam(db : Session = Depends(get_db)):
+    puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
+                hour=0, minute=0, second=0, microsecond=0)
+    model = scamdle.getScamOfTheDayTemp(db, str(puzzleday)[0:10])
+
+    return model
+
+
+    
+#Given Guess is the string variable passed to us, which will always be the exact wording of a Scam from the capital one scam list: https://www.capitalone.com/help-center/fraud-disputes/common-scam-types/ 
 '''
 @app.get("/api/whichscam/verify")
-def verify_daily_scam(db : Session = Depends(get_db)):
+def verify_daily_scam(givenGuess):
     puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
-            hour=0, minute=0, second=0, microsecond=0)
-    name, desc, unexp, urg, impe, unus, good = scamdle.getScamOfTheDayTemp(db, str(puzzleday)[0:10])
-    return {
-        "puzzleday" : puzzleday.timestamp(),
-        "name": name,
-        "desc" : desc,
-        "unexpected" : unexp,
-        "urgency" : urg,
-        "impersonation" : impe,
-        "unusualPayment" : unus,
-        "toogood" : good
+                hour=0, minute=0, second=0, microsecond=0)
+    model = getScam(puzzleday)
+    if model.scamname == givenGuess:
+        correctScam = True
+    else:
+        correctScam = False
+    
+    guessModel = getScamFromName(givenGuess) #This function needs to be able to query the data base and return the model where the scam name == givenGuess
+
+
+    
+    if correctScam == True:
+        return {
+            "puzzleday" : puzzleday.timestamp(),
+            "correctscam" : correctScam,
+            "desc" : guessModel.scamdesc,
+            "unexpected" : model.unexpectedmodel.urgency == guessModel.urgency,
+            "urgency" : model.urgency == guessModel.urgency,
+            "impersonation" : model.impersonation == guessModel.impersonation,
+            "unusualPayment" : model.unusualpayment == guessModel.unusualPayment,
+            "toogood" : model.toogood == guessModel.toogood  
+
     }
-    '''
+    elif correctScam == False:
+        return{
+            "puzzleday" : puzzleday.timestamp(),
+            "correctscam" : correctScam,
+            "desc" : guessModel.scamdesc,
+            "unexpected" : model.unexpectedmodel.urgency == guessModel.urgency,
+            "urgency" : model.urgency == guessModel.urgency,
+            "impersonation" : model.impersonation == guessModel.impersonation,
+            "unusualPayment" : model.unusualpayment == guessModel.unusualPayment,
+            "toogood" : model.toogood == guessModel.toogood
+        }
+'''
+    
     
 @app.post("/api/login")
 def login(form_data : Annotated[OAuth2PasswordRequestForm, Depends()], db : Session = Depends(get_db)):
