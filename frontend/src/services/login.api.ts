@@ -1,24 +1,37 @@
-import type { User } from "../context/UserContext";
+const socket = 'http://127.0.0.1:8000'
+const FETCH_ID_URL = '/api/reqid'
 
-const URL = ''
+// interface Credentials {
+//     username: string;
+//     password: string;
+// }
 
-interface Credentials {
-    username: string;
-    password: string;
+// export async function loginRequest(creds: Credentials ): Promise<User> {
+//     const res = await fetch(socket + URL, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(creds)
+//     })
+
+//     if (!res.ok) {
+//         const errorData = await res.json().catch(() => ({}))
+//         throw new Error(errorData.message || 'Failed to log in')
+//     }
+
+//     return res.json()
+// }
+
+interface IDProp {
+    id: string
 }
 
-export async function loginRequest(creds: Credentials ): Promise<User> {
-    const res = await fetch(URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(creds)
-    })
+export async function requestID(): Promise<IDProp> {
+    const res = await fetch(socket+FETCH_ID_URL)
 
     if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}))
-        throw new Error(errorData.message || 'Failed to log in')
+      throw new Error(`Failed to fetch @${socket+URL}`)
     }
 
     return res.json()

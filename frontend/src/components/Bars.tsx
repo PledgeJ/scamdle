@@ -8,15 +8,18 @@ import { Window } from "./Window"
 import { useUser } from '../context/UserContext'
 import { useState, useRef } from "react";
 import Draggable from "react-draggable";
+import { DesktopIcon } from "./DesktopIcon";
 
 interface barProps {
   title?: string;
   children?: React.ReactNode;
+  size?: {h: number|string, w: number|string};
 }
 
 export function Bars({
   title,
   children,
+  size = {h: '65vh', w: '70vw'},
 }: barProps): React.JSX.Element {
   const nav = useNavigate();
 	const page = useLocation().pathname;
@@ -63,7 +66,7 @@ export function Bars({
           >
             <Window pink={pinkMode} title={"Login"} size={{ h: 350, w: 450 }} close={() => setShowLogin(false)}>
               <Box className='no-drag'>
-                <Typography>Login</Typography>
+                <Typography>This doesn't actually do anything just yet but it was too cool to get rid of, I mean its a floating window that you can open and close</Typography>
               </Box>
             </Window>
           </Box>
@@ -79,7 +82,7 @@ export function Bars({
           bgcolor: 'transparent', border: 'none'
         }}
       >
-        <Typography variant="h1" sx={{  }}>Scamdle</Typography>
+        <Typography variant="h1" sx={{ fontSize: '3rem' }}>Scamdle</Typography>
       </Box>
 
       {/* Sidebar */}
@@ -93,6 +96,7 @@ export function Bars({
           borderColor: 'divider', bgcolor: 'transparent', p: 2
         }}
       >
+        <DesktopIcon text={"Test"} iconPath={"/startLogo.webp"}></DesktopIcon>
         <RetroButton onClick={() => nav('/')} width={200} ><Typography sx={{ fontSize: 22 }}>Home</Typography></RetroButton><br/><br/>
         <RetroButton onClick={() => nav('/sms')} width={200} ><Typography sx={{ fontSize: 22 }}>SMS Sort</Typography></RetroButton><br/><br/>
         <RetroButton onClick={() => nav('/phishing')} width={200} ><Typography sx={{ fontSize: 22 }}>Phishing email</Typography></RetroButton><br/><br/>
@@ -128,7 +132,7 @@ export function Bars({
             },
           }}
         >
-          <Window pink={pinkMode} title={title}>{children}</Window>
+          <Window pink={pinkMode} title={title} size={{h: size.h, w: size.w}}><Box sx={{cursor: 'default', height: '65vh'}} className="no-drag">{children}</Box></Window>
         </Box>
       </Draggable>
 

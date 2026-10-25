@@ -1,18 +1,12 @@
 import { createContext, useContext } from 'react';
 
-export interface User {
-  username: string;
-  dayComplete: boolean;
-}
 
 export interface UserContextType {
-  user: User | null;
+  user: string;
   pinkMode: boolean;
   setPinkMode: (bool: boolean) => void;
-  login: (username: string, password: string) => void;
   logout: () => void;
-  isLoading: boolean;
-  error: string | null;
+  setUser: (id: string) => void;
 }
 
 export const UserContext = createContext<UserContextType | undefined>(undefined);
