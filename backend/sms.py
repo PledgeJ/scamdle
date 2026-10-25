@@ -29,16 +29,19 @@ def addTexts(db: Session):
         db.add(DAILYIMAGE[item])
     db.commit()
 
-
 def uploadTexts(db: Session, date: str):
     if db.query(Sms).count() == 0: addTexts(db)
-    texts = db.execute(select(Sms.reasonone, Sms.reasontwo, Sms.isscam, Sms.smsmessage).where(Sms.dayid == date)).all()
-    return [tuple(row) for row in texts]
-
-
-
-
-
+    texts = db.scalars(select(Sms).where(Sms.dayid == date)).all()
+    print(texts)
+    out = []
+    for item in texts: 
+        out.append({
+            "isScam" : item.isscam, 
+            "msg" : item.smsmessage, 
+            "reason1" : item.reasonone, 
+            "reason2" : item.reasontwo
+        }) 
+    return out 
 
 
 

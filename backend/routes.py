@@ -44,6 +44,9 @@ class RegisterPayload(BaseModel):
     username : str 
     password : str 
     
+class GuessPayload(BaseModel): 
+    guess : str
+    
 def get_db():
     db = SessionLocal()
     try:
@@ -66,6 +69,10 @@ def get_current_user(token : Annotated[str | None, Depends(Oauth2Scheme)], db : 
     except Exception:
         return None 
     
+def getpuzzleday(): 
+    return datetime.datetime.now(datetime.timezone.utc).replace(
+    hour=0, minute=0, second=0, microsecond=0)
+    
 @app.get('/api/') 
 def root(): 
     return {"hello" : "Another Hello World!"}
@@ -73,8 +80,7 @@ def root():
 
 @app.get('/api/phishing/daily')
 def get_daily_email(db : Session = Depends(get_db)): 
-    puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
-    hour=0, minute=0, second=0, microsecond=0)
+    puzzleday = getpuzzleday()
     
     return { 
             "puzzleday" : puzzleday.timestamp(), 
@@ -99,8 +105,7 @@ def submit_daily_email(request : Request,
     else: 
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Missing X-Player-Id Header.")
     
-    puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
-        hour=0, minute=0, second=0, microsecond=0)
+    puzzleday = getpuzzleday()
 
     is_correct = phishing.submit_result(db, sectionuid, puzzleday)
     
@@ -134,8 +139,7 @@ def submit_daily_email(request : Request,
 
 @app.get("/api/sms/daily")
 def get_daily_sms(db : Session = Depends(get_db)):
-    puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
-        hour=0, minute=0, second=0, microsecond=0)
+    puzzleday = getpuzzleday()
     texts = sms.uploadTexts(db, str(puzzleday)[0:10])
     return {
         "puzzleday" : puzzleday.timestamp(),
@@ -144,8 +148,7 @@ def get_daily_sms(db : Session = Depends(get_db)):
 
 @app.get("/api/whichscam/daily")
 def get_daily_scam(db : Session = Depends(get_db)):
-    puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
-            hour=0, minute=0, second=0, microsecond=0)
+    puzzleday = getpuzzleday()
     model = scamdle.getScamOfTheDay(db, str(puzzleday)[0:10])
     return {
         "puzzleday" : puzzleday.timestamp(),
@@ -159,9 +162,7 @@ def get_daily_scam(db : Session = Depends(get_db)):
     }
 
 def getScam(db : Session = Depends(get_db)):
-    puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
-                hour=0, minute=0, second=0, microsecond=0)
-    model = scamdle.getScamOfTheDay(db, str(puzzleday)[0:10])
+    model = scamdle.getScamOfTheDay(db, str(getpuzzleday())[0:10])
 
     return model
 
@@ -170,44 +171,23 @@ def getScam(db : Session = Depends(get_db)):
 #Given Guess is the string variable passed to us, which will always be the exact wording of a Scam from the 
 # capital one scam list: https://www.capitalone.com/help-center/fraud-disputes/common-scam-types/ 
 
-@app.post("/api/whichscam/verify")
-def verify_daily_scam(givenGuess : Annotated[str | None, Header()] = None , db : Session = Depends(get_db)):
-    puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
-                hour=0, minute=0, second=0, microsecond=0)
-    model = getScam(puzzleday)
-    if model.scamname == givenGuess:
-        correctScam = True
-    else:
-        correctScam = False
-    
-    guessModel = scamdle.getScamFromName(db, givenGuess) #This function needs to be able to query the data base and return the model where the scam name == givenGuess
-    
-    if correctScam == True:
-        return {
-            "puzzleday" : puzzleday.timestamp(),
-            "correctscam" : correctScam,
-            "desc" : guessModel.scamdesc,
-            "unexpected" : model.unexpectedmodel.urgency == guessModel.urgency,
-            "urgency" : model.urgency == guessModel.urgency,
-            "impersonation" : model.impersonation == guessModel.impersonation,
-            "unusualPayment" : model.unusualpayment == guessModel.unusualPayment,
-            "toogood" : model.toogood == guessModel.toogood  
+@app.post("/api/whichscam/verify/")
+def verify_daily_scam(payload : GuessPayload , db : Session = Depends(get_db)):
+    model = getScam(db)
+    guessModel = scamdle.getScamFromName(db, payload.guess) #This function needs to be able to query the data base and return the model where the scam name == givenGuess
 
+    return {
+        "puzzleday" : getpuzzleday().timestamp(),
+        "correctscam" : model.scamname == payload.guess,
+        "desc" : guessModel.scamdesc,
+        "unexpected" : model.unexpected == guessModel.unexpected,
+        "urgency" : model.urgency == guessModel.urgency,
+        "impersonation" : model.impersonation == guessModel.impersonation,
+        "unusualPayment" : model.unusualpayment == guessModel.unusualpayment,
+        "toogood" : model.toogood == guessModel.toogood  
     }
-    elif correctScam == False:
-        return{
-            "puzzleday" : puzzleday.timestamp(),
-            "correctscam" : correctScam,
-            "desc" : guessModel.scamdesc,
-            "unexpected" : model.unexpectedmodel.urgency == guessModel.urgency,
-            "urgency" : model.urgency == guessModel.urgency,
-            "impersonation" : model.impersonation == guessModel.impersonation,
-            "unusualPayment" : model.unusualpayment == guessModel.unusualPayment,
-            "toogood" : model.toogood == guessModel.toogood
-        }
+    
 
-    
-    
 @app.post("/api/login")
 def login(form_data : Annotated[OAuth2PasswordRequestForm, Depends()], db : Session = Depends(get_db)):
     user = auth.authenticate_user(db, form_data.username, form_data.password)
@@ -246,3 +226,4 @@ def current_user(current_user : Annotated[User, Depends(get_current_user)]):
 @app.get("/api/reqid")
 def get_player_id(): 
     return {"id" : str(uuid.uuid4())}
+
