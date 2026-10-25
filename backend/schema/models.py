@@ -135,7 +135,7 @@ class DailyProgress(Base):
 class Sms(Base):
     __tablename__ = "sms"
 
-    smsis : Mapped[int] = mapped_column(
+    smsid : Mapped[int] = mapped_column(
         Integer, primary_key=True, nullable=False
     )
     dayid : Mapped[str] = mapped_column(
@@ -144,10 +144,10 @@ class Sms(Base):
     isscam: Mapped[bool] = mapped_column(
         Boolean, nullable=False
     )
-    reason1: Mapped[str] = mapped_column(
+    reasonone: Mapped[str] = mapped_column(
         Text, nullable=False
     )
-    reason2: Mapped[str] = mapped_column(
+    reasontwo: Mapped[Optional[str]] = mapped_column(
        Text
     )
     smsmessage: Mapped[str] = mapped_column(

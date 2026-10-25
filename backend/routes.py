@@ -133,10 +133,10 @@ def submit_daily_email(request : Request,
 
 
 @app.get("/api/sms/daily")
-def get_daily_sms():
+def get_daily_sms(db : Session = Depends(get_db)):
     puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
         hour=0, minute=0, second=0, microsecond=0)
-    texts = sms.uploadTexts(str(puzzleday)[0:10])
+    texts = sms.uploadTexts(db, str(puzzleday)[0:10])
     return {
         "puzzleday" : puzzleday.timestamp(),
         "textData" : texts

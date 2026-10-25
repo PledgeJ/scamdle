@@ -54,8 +54,8 @@ CREATE TABLE sms (
     smsid INTEGER primary key not null,
     dayid TEXT not null,
     isscam BOOLEAN not null,
-    reason1 TEXT not null,
-    reason2 TEXT,
+    reasonone TEXT not null,
+    reasontwo TEXT,
     smsmessage TEXT not null
 );
 
