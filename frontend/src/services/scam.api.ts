@@ -1,4 +1,4 @@
-const socket = 'http://10.238.9.13:8000'
+const socket = 'http://127.0.0.1:8000'
 const URL = '/api/whichscam/verify'
 
 export interface Scam{

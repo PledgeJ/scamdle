@@ -70,8 +70,12 @@ def get_current_user(token : Annotated[str | None, Depends(Oauth2Scheme)], db : 
         return None 
     
 def getpuzzleday(): 
-    return datetime.datetime.now(datetime.timezone.utc).replace(
-    hour=0, minute=0, second=0, microsecond=0)
+    # Locking the day on 25th October 2026
+    return datetime.datetime.fromtimestamp(1792921062)
+    
+    # Removed for testing
+    #return datetime.datetime.now(datetime.timezone.utc).replace(
+    #hour=0, minute=0, second=0, microsecond=0)
     
 @app.get('/api/') 
 def root(): 
