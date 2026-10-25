@@ -9,11 +9,8 @@ import os
 
 import phishing
 import sms
-<<<<<<< HEAD
 import scamdle
-=======
 import auth 
->>>>>>> a214824d79ac0ba585836dd5217834365e66c078
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session 
@@ -96,7 +93,7 @@ def get_daily_sms():
 def get_daily_scam():
     puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
             hour=0, minute=0, second=0, microsecond=0)
-    name, desc, unexp, urg, impe, unus, good = scamdle.genScamOfTheDay()
+    name, desc, unexp, urg, impe, unus, good = scamdle.getScamOfTheDay(str(puzzleday)[0:10])
     return {
         "puzzleday" : puzzleday.timestamp(),
         "name": name,
