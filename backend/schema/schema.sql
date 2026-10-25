@@ -43,4 +43,14 @@ CREATE TABLE sms (
     reason1 TEXT,
     reason2 TEXT,
     message TEXT
-)
+);
+
+CREATE TABLE scamdle (
+    name TEXT,
+    desc TEXT,
+    unexpected BOOLEAN,
+    urgency BOOLEAN,
+    impersonation BOOLEAN,
+    unusualpayment BOOLEAN,
+    toogood BOOLEAN
+);
