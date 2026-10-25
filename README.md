@@ -12,13 +12,15 @@ The original Scamdle, where you are tasked to identify the scam based on common 
 >
 
 
-# Contributors
+# Contributorsgit 
 
 Jacob Pledge - []()
 
 Dylan Brett - []()
 
 Chinonso Oti - [github.com/chinooti](https://github.com/chinooti)
+
+George Barfield - []()
 
 # Contact
 
