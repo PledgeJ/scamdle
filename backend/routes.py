@@ -169,9 +169,9 @@ def getScam(db : Session = Depends(get_db)):
     
 #Given Guess is the string variable passed to us, which will always be the exact wording of a Scam from the 
 # capital one scam list: https://www.capitalone.com/help-center/fraud-disputes/common-scam-types/ 
-'''
-@app.get("/api/whichscam/verify")
-def verify_daily_scam(givenGuess, db : Session = Depends(get_db)):
+
+@app.post("/api/whichscam/verify")
+def verify_daily_scam(givenGuess : Annotated[str | None, Header()] = None , db : Session = Depends(get_db)):
     puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
                 hour=0, minute=0, second=0, microsecond=0)
     model = getScam(puzzleday)
@@ -181,8 +181,6 @@ def verify_daily_scam(givenGuess, db : Session = Depends(get_db)):
         correctScam = False
     
     guessModel = scamdle.getScamFromName(db, givenGuess) #This function needs to be able to query the data base and return the model where the scam name == givenGuess
-
-
     
     if correctScam == True:
         return {
@@ -207,7 +205,7 @@ def verify_daily_scam(givenGuess, db : Session = Depends(get_db)):
             "unusualPayment" : model.unusualpayment == guessModel.unusualPayment,
             "toogood" : model.toogood == guessModel.toogood
         }
-'''
+
     
     
 @app.post("/api/login")
