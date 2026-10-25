@@ -74,11 +74,13 @@ export function SMS(): React.JSX.Element {
             <MessageBubble message={"There's been an error loading the game"} />
             <MessageBubble right message={"What's the error?"} />
             <MessageBubble message={error}/>
+            <MessageBubble right message={"Uh oh"}/>
           </>}
 
           {isLoading && <>
             <MessageBubble message={"The game is taking a long time to load huh"} />
-            <MessageBubble right message={"Damn, there might be something wrong with it"} />
+            <MessageBubble right message={"Yeah I have slow internet"} />
+            <MessageBubble message={"You should probably look at that"} />
           </>}
       </Box>
 
