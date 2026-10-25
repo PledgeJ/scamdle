@@ -1,6 +1,9 @@
 # This sms game is designed to help combat the GrandParent scam
 
 from pydantic import BaseModel
+from schema.models import Sms
+from sqlalchemy.orm import Session 
+from sqlalchemy import select
 
 class scamImage(BaseModel):
     id: int
@@ -20,9 +23,20 @@ DAILYIMAGE = {
     6: scamImage(id = 6, dayID = "2026-10-26", isScam = True, reason1 =  "Requesting Secrecy", message = "images/scam1.webp"),
 }
 
+def addTexts(db: Session):
+    for item in DAILYIMAGE:
+        db.add(DAILYIMAGE[item])
+    db.commit()
 
 
-def uploadImages(date:str):
+def uploadText(db: Session, date: str):
+    if db.query(Sms).count() == 0: addTexts(db)
+    texts = db.scalars(select(Sms.reason1, Sms.reason2, Sms.isscam, Sms.msg).where(Sms.dayid == date))
+    return texts
+
+
+
+def uploadImagesfda(date:str):
     images = []
     for item in DAILYIMAGE:
         if date == DAILYIMAGE[item].dayID:
@@ -33,6 +47,9 @@ def uploadImages(date:str):
                 "msg": DAILYIMAGE[item].message}
                 )
     return images
+
+
+
 
 
 
