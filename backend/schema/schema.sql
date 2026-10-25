@@ -40,17 +40,18 @@ CREATE TABLE sms (
     smsid INTEGER primary key not null,
     dayid TEXT not null,
     isscam BOOLEAN not null,
-    reason1 TEXT,
+    reason1 TEXT not null,
     reason2 TEXT,
-    message TEXT
+    message TEXT not null
 );
 
 CREATE TABLE scamdle (
-    name TEXT,
-    desc TEXT,
-    unexpected BOOLEAN,
-    urgency BOOLEAN,
-    impersonation BOOLEAN,
-    unusualpayment BOOLEAN,
-    toogood BOOLEAN
+    date TEXT primary key not null,
+    name TEXT not null,
+    desc TEXT not null,
+    unexpected BOOLEAN not null,
+    urgency BOOLEAN not null,
+    impersonation BOOLEAN not null,
+    unusualpayment BOOLEAN not null,
+    toogood BOOLEAN not null
 );
