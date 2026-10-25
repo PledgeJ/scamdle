@@ -96,7 +96,7 @@ export function Phishing(): React.JSX.Element {
     return () => {
       isMounted = false;
     };
-  }, [])
+  })
 
   useEffect(() => {
     let isMounted = true;

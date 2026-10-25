@@ -4,11 +4,12 @@ import type React from "react";
 interface IconProps {
   text?: string;
   iconPath: string;
-  onClick?: () => void
+  onClick?: () => void;
+  iconSize: {h: string | number, w: string | number}
 }
 
 export function DesktopIcon({
-  text, iconPath, onClick
+  text, iconPath, onClick, iconSize
 }: IconProps): React.JSX.Element {
   return (
     <Button
@@ -18,7 +19,7 @@ export function DesktopIcon({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        width: 76,
+        width: 100,
         padding: '4px',
         margin: '8px',
         cursor: 'pointer',
@@ -34,13 +35,13 @@ export function DesktopIcon({
         },
       }}
     >
-      {/* Icon Wrapper */}
+      {/* Icon Wrapper - w+h 90 originally */}
       <Box
         component={'img'}
         src={iconPath}
         sx={{
-          width: 100,
-          height: 100,
+          width: iconSize.w,
+          height: iconSize.h,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

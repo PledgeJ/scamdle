@@ -38,7 +38,7 @@ export function Clock({ size = 22, seconds = false }: clockProps): React.JSX.Ele
     const interval = setInterval(updateTime, 1000)
 
     return () => clearInterval(interval)
-  }, []);
+  });
 
   return (
     <Typography sx={{ fontSize:size }}>{time}</Typography>

@@ -9,5 +9,7 @@ export function Scam(): React.JSX.Element {
         SCAM
       </Typography>
     </Bars>
+
+    
   )
 }

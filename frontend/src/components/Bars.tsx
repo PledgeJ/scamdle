@@ -39,7 +39,7 @@ export function Bars({
         gridTemplateRows: '100px 1fr 55px',
         gridTemplateAreas: {
           xs: `
-            "header header"
+            "sidebar header"
             "sidebar main"
             "taskbar taskbar"
           `,
@@ -79,12 +79,12 @@ export function Bars({
       <Box
         sx={{
           gridArea: 'header',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          display: 'flex', alignItems: 'center', justifyContent: 'right',
           zIndex: (theme) => theme.zIndex.drawer + 1,
           bgcolor: 'transparent', border: 'none'
         }}
       >
-        <Typography variant="h1" sx={{ fontSize: '3rem' }}>Scamdle</Typography>
+        <Typography variant="h1" sx={{ fontSize: '3rem', mr: 3 }}>Scamdle</Typography>
       </Box>
 
       {/* Sidebar */}
@@ -94,28 +94,31 @@ export function Bars({
         elevation={0}
         sx={{
           gridArea: 'sidebar',
-          display: 'block',
+          display: 'flex', gap: 1,
           borderColor: 'divider', bgcolor: 'transparent', p: 2
         }}
       >
-        <DesktopIcon text={"Test"} iconPath={"/startLogo.webp"}></DesktopIcon>
-        <RetroButton onClick={() => nav('/')} width={200} ><Typography sx={{ fontSize: 22 }}>Home</Typography></RetroButton><br/><br/>
-        <RetroButton onClick={() => nav('/sms')} width={200} ><Typography sx={{ fontSize: 22 }}>SMS Sort</Typography></RetroButton><br/><br/>
-        <RetroButton onClick={() => nav('/phishing')} width={200} ><Typography sx={{ fontSize: 22 }}>Phishing email</Typography></RetroButton><br/><br/>
-        <RetroButton onClick={() => nav('/scam')} width={200} ><Typography sx={{ fontSize: 22 }}>Find the Scam</Typography></RetroButton><br/><br/>
-        <RetroButton onClick={() => setPinkMode(!pinkMode)} width={200} ><Typography sx={{ fontSize: 22 }}>PinkMode</Typography></RetroButton><br/><br/>
+        <Box sx={{display: 'flex', flexDirection: 'column'}}>
+          <DesktopIcon text="Home" onClick={() => nav('/')} iconPath={"/computer.png"} iconSize={{h: 90, w:90}}/>
+          <Box sx={{mb: 16}}><DesktopIcon text="SMS Sort" onClick={() => nav('/sms')} iconPath={"/msn.png"} iconSize={{h: 80, w:80}}/></Box>
+          <DesktopIcon text="Email" onClick={() => nav('/phishing')} iconPath={"/email.png"} iconSize={{h: 90, w:90}}/> 
+          <DesktopIcon text="Super secret pink mode of joy and whimsy" onClick={() => setPinkMode(!pinkMode)} iconPath={"/book.png"} iconSize={{h: 110, w:110}}/>
+        </Box>
+        <Box sx={{display: 'flex', flexDirection: 'column', gap: 17, mt: 1}}>
+          <DesktopIcon text="Scamdle" onClick={() => nav('/scam')} iconPath={"/scamdle.png"} iconSize={{h: 80, w:80}}/> 
 
-        {page == '/' && <RetroButton 
-          onClick={() => {
-            if (showLogin) { return }
-            if (user !== undefined) {logout()}
-            
-            setShowLogin(true)
-          }} 
-          width={200}
-        >
-          <Typography sx={{ fontSize: 22 }}>{user !== undefined ? 'Login':'Logout'}</Typography>
-        </RetroButton>}
+          <DesktopIcon 
+            iconPath="/agent.png"
+            text={user !== undefined ? 'Login':'Logout'}
+            onClick={() => {
+              if (showLogin) { return }
+              if (user !== undefined) {logout()}
+              
+              setShowLogin(true)
+            }} 
+            iconSize={{h: 80, w:80}}
+          />
+        </Box>
       </Paper>
 
       {/* Main Content Area */}
@@ -190,7 +193,7 @@ export function Bars({
 
           {(page == '/' || page == '/scam') && 
             <RetroButton width={250}>
-              <Typography sx={{ fontSize: 22, width: '100%', textAlign: 'left' }}>Find the scam {page == '/' && ' bloat'}</Typography>
+              <Typography sx={{ fontSize: 22, width: '100%', textAlign: 'left' }}>Scamdle{page == '/' && ' bloat'}</Typography>
             </RetroButton>
           }
         </Box>

@@ -44,7 +44,7 @@ export function Home(): React.JSX.Element {
     return () => {
       isMounted = false;
     };
-  }, [])
+  })
 
   if ((isLoading || error)) {
     return (

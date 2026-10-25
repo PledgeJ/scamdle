@@ -68,7 +68,7 @@ export function SMS(): React.JSX.Element {
 
   if (isLoading || !data || error) {
     return (
-      <Bars title="SMS Sort">
+      <Bars title="SMS Sort" size={{ h: 780, w: 600 }}>
         <Box sx={{ width: '100%', mt: 3, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           {(isLoading || (!data && !error)) && <Typography>Loading...</Typography>}
           {error && <Typography>Error loading game: {error}</Typography>}
