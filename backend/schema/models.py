@@ -136,18 +136,18 @@ class Scamdle(Base):
     desc : Mapped[str] = mapped_column(
         Text
     )
-    unexpected = Mapped[bool] = mapped_column(
+    unexpected : Mapped[bool] = mapped_column(
         Boolean
     )
-    urgency = Mapped[bool] = mapped_column(
+    urgency : Mapped[bool] = mapped_column(
         Boolean
     )
-    impersonation = Mapped[bool] = mapped_column(
+    impersonation : Mapped[bool] = mapped_column(
         Boolean
     )
-    unusualpayment = Mapped[bool] = mapped_column(
+    unusualpayment : Mapped[bool] = mapped_column(
         Boolean
     )
-    toogood = Mapped[bool] = mapped_column(
+    toogood : Mapped[bool] = mapped_column(
         Boolean
     )
