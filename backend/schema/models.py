@@ -122,7 +122,7 @@ class Sms(Base):
     reason2: Mapped[str] = mapped_column(
        Text
     )
-    message: Mapped[str] = mapped_column(
+    smsmessage: Mapped[str] = mapped_column(
         Text, nullable=False
     )
 
@@ -131,13 +131,13 @@ class Scamdle(Base):
     __tablename__ = "scamdle"
 
 
-    date : Mapped[str] = mapped_column(
+    thedate : Mapped[str] = mapped_column(
         Text, primary_key=True, nullable=False
     )
-    name : Mapped[str] = mapped_column(
+    scamname : Mapped[str] = mapped_column(
         Text, nullable=False
     )
-    desc : Mapped[str] = mapped_column(
+    scamdesc : Mapped[str] = mapped_column(
         Text, nullable=False
     )
     unexpected : Mapped[bool] = mapped_column(

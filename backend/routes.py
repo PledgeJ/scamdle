@@ -12,6 +12,8 @@ import sms
 import scamdle
 import auth 
 
+
+from schema.models import Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session 
 
@@ -26,6 +28,8 @@ DATABASE_URL = "sqlite:///./scamdle.db"
 engine = create_engine(
     DATABASE_URL, connect_args={"check_same_thread": False}
 )
+Base.metadata.create_all(engine)
+
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Oauth2Scheme = OAuth2PasswordBearer(tokenUrl="/api/login")
@@ -44,7 +48,6 @@ def get_db():
         yield db  # This is handed over to the endpoint
     finally:
         db.close()  # Guaranteed to close after the response is sent
-        
 
 @app.get('/api/') 
 def root(): 
@@ -84,7 +87,7 @@ def submit_daily_email(request : Request, sectionuid : str, db : Session = Depen
 def get_daily_sms():
     puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
         hour=0, minute=0, second=0, microsecond=0)
-    texts = sms.uploadImages(str(puzzleday)[0:10])
+    texts = sms.uploadTexts(str(puzzleday)[0:10])
     return {
         "puzzleday" : puzzleday.timestamp(),
         "textData" : texts
@@ -94,16 +97,16 @@ def get_daily_sms():
 def get_daily_scam(db : Session = Depends(get_db)):
     puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
             hour=0, minute=0, second=0, microsecond=0)
-    name, desc, unexp, urg, impe, unus, good = scamdle.getScamOfTheDayTemp(db, str(puzzleday)[0:10])
+    model = scamdle.getScamOfTheDayTemp(db, str(puzzleday)[0:10])
     return {
         "puzzleday" : puzzleday.timestamp(),
-        "name": name,
-        "desc" : desc,
-        "unexpected" : unexp,
-        "urgency" : urg,
-        "impersonation" : impe,
-        "unusualPayment" : unus,
-        "toogood" : good
+        "name": model.scamname,
+        "desc" : model.scamdesc,
+        "unexpected" : model.unexpected,
+        "urgency" : model.urgency,
+        "impersonation" : model.impersonation,
+        "unusualPayment" : model.unusualpayment,
+        "toogood" : model.toogood
     }
 
     
