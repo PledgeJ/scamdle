@@ -171,7 +171,7 @@ def getScam(db : Session = Depends(get_db)):
 # capital one scam list: https://www.capitalone.com/help-center/fraud-disputes/common-scam-types/ 
 '''
 @app.get("/api/whichscam/verify")
-def verify_daily_scam(givenGuess):
+def verify_daily_scam(givenGuess, db : Session = Depends(get_db)):
     puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
                 hour=0, minute=0, second=0, microsecond=0)
     model = getScam(puzzleday)
@@ -180,7 +180,7 @@ def verify_daily_scam(givenGuess):
     else:
         correctScam = False
     
-    guessModel = getScamFromName(givenGuess) #This function needs to be able to query the data base and return the model where the scam name == givenGuess
+    guessModel = scamdle.getScamFromName(db, givenGuess) #This function needs to be able to query the data base and return the model where the scam name == givenGuess
 
 
     
