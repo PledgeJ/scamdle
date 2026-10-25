@@ -22,7 +22,14 @@ class scamDay(BaseModel):
     date : str
 
 
-SCAMS = {
+
+def ensureTableExists(db: Session):
+    if db.query(schema.models.Scamdle).count() == 0:
+            addScams(db)
+
+
+def addScams(db: Session):
+    SCAMS = {
     1 : schema.models.Scamdle(thedate = "2026-10-25", scamname = "Payment scams", scamdesc = "Be wary if you are urged to make a purchase with the promise of compensation, or if someone offers to make a payment for you, or provides you with bank account info with which to make a payment. If something sounds too good to be true, it probably is. If you use a payment method you are not familiar with, you run the risk of ultimately being held responsible for the amount paid.",
              unexpected = True, urgency = True, impersonation = False, unusualpayment = True, toogood = True),
 
@@ -87,12 +94,6 @@ SCAMS = {
               unexpected = True, urgency = True, impersonation = True, unusualpayment = True, toogood = False),
 }
 
-def ensureTableExists(db: Session):
-    if db.query(schema.models.Scamdle).count() == 0:
-            addScams(db)
-
-
-def addScams(db: Session):
     for scamid in SCAMS:
         db.add(SCAMS[scamid])
     db.commit()
