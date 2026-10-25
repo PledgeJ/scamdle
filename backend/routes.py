@@ -44,6 +44,9 @@ class RegisterPayload(BaseModel):
     username : str 
     password : str 
     
+class GuessPayload(BaseModel): 
+    guess : str
+    
 def get_db():
     db = SessionLocal()
     try:
@@ -168,25 +171,23 @@ def getScam(db : Session = Depends(get_db)):
 #Given Guess is the string variable passed to us, which will always be the exact wording of a Scam from the 
 # capital one scam list: https://www.capitalone.com/help-center/fraud-disputes/common-scam-types/ 
 
-@app.post("/api/whichscam/verify")
-def verify_daily_scam(givenGuess : Annotated[str | None, Header()] = None , db : Session = Depends(get_db)):
+@app.post("/api/whichscam/verify/")
+def verify_daily_scam(payload : GuessPayload , db : Session = Depends(get_db)):
     model = getScam(db)
-    guessModel = scamdle.getScamFromName(db, givenGuess) #This function needs to be able to query the data base and return the model where the scam name == givenGuess
+    guessModel = scamdle.getScamFromName(db, payload.guess) #This function needs to be able to query the data base and return the model where the scam name == givenGuess
 
     return {
         "puzzleday" : getpuzzleday().timestamp(),
-        "correctscam" : model.scamname == givenGuess,
+        "correctscam" : model.scamname == payload.guess,
         "desc" : guessModel.scamdesc,
-        "unexpected" : model.unexpectedmodel.urgency == guessModel.urgency,
+        "unexpected" : model.unexpected == guessModel.unexpected,
         "urgency" : model.urgency == guessModel.urgency,
         "impersonation" : model.impersonation == guessModel.impersonation,
-        "unusualPayment" : model.unusualpayment == guessModel.unusualPayment,
+        "unusualPayment" : model.unusualpayment == guessModel.unusualpayment,
         "toogood" : model.toogood == guessModel.toogood  
     }
     
 
-    
-    
 @app.post("/api/login")
 def login(form_data : Annotated[OAuth2PasswordRequestForm, Depends()], db : Session = Depends(get_db)):
     user = auth.authenticate_user(db, form_data.username, form_data.password)
