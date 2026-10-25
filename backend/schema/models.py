@@ -102,3 +102,26 @@ class PhishingEmailEntry(Base):
     isscam : Mapped[bool] = mapped_column(Boolean, default=False)
     # Relationships
     email: Mapped["PhishingEmail"] = relationship(back_populates="entries")
+
+
+class Sms(Base):
+    __tablename__ = "sms"
+
+    smsis : Mapped[int] = mapped_column(
+        Integer, primary_key=True, nullable=False
+    )
+    dayid : Mapped[str] = mapped_column(
+        Text
+    )
+    isscam: Mapped[bool] = mapped_column(
+        Boolean
+    )
+    reason1: Mapped[str] = mapped_column(
+        Text
+    )
+    reason2: Mapped[str] = mapped_column(
+       Text
+    )
+    message: Mapped[str] = mapped_column(
+        Text
+    )

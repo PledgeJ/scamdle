@@ -37,7 +37,7 @@ CREATE TABLE phishing_emails (
 );
 
 CREATE TABLE sms (
-    smsid INT primary key not null,
+    smsid INTEGER primary key not null,
     dayid TEXT not null,
     isscam BOOLEAN not null,
     reason1 TEXT,
