@@ -56,13 +56,13 @@ CREATE TABLE sms (
     isscam BOOLEAN not null,
     reason1 TEXT not null,
     reason2 TEXT,
-    message TEXT not null
+    smsmessage TEXT not null
 );
 
 CREATE TABLE scamdle (
-    date TEXT primary key not null,
-    name TEXT not null,
-    desc TEXT not null,
+    thedate TEXT primary key not null,
+    scamname TEXT not null,
+    scamdesc TEXT not null,
     unexpected BOOLEAN not null,
     urgency BOOLEAN not null,
     impersonation BOOLEAN not null,

@@ -13,6 +13,8 @@ import sms
 import scamdle
 import auth 
 
+
+from schema.models import Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session 
 
@@ -27,6 +29,8 @@ DATABASE_URL = "sqlite:///./scamdle.db"
 engine = create_engine(
     DATABASE_URL, connect_args={"check_same_thread": False}
 )
+Base.metadata.create_all(engine)
+
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Oauth2Scheme = OAuth2PasswordBearer(tokenUrl="/api/login", auto_error=False)
@@ -132,7 +136,7 @@ def submit_daily_email(request : Request,
 def get_daily_sms():
     puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
         hour=0, minute=0, second=0, microsecond=0)
-    texts = sms.uploadImages(str(puzzleday)[0:10])
+    texts = sms.uploadTexts(str(puzzleday)[0:10])
     return {
         "puzzleday" : puzzleday.timestamp(),
         "textData" : texts
@@ -140,6 +144,22 @@ def get_daily_sms():
 
 @app.get("/api/whichscam/daily")
 def get_daily_scam(db : Session = Depends(get_db)):
+    puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
+            hour=0, minute=0, second=0, microsecond=0)
+    model = scamdle.getScamOfTheDayTemp(db, str(puzzleday)[0:10])
+    return {
+        "puzzleday" : puzzleday.timestamp(),
+        "name": model.scamname,
+        "desc" : model.scamdesc,
+        "unexpected" : model.unexpected,
+        "urgency" : model.urgency,
+        "impersonation" : model.impersonation,
+        "unusualPayment" : model.unusualpayment,
+        "toogood" : model.toogood
+    }
+'''
+@app.get("/api/whichscam/verify")
+def verify_daily_scam(db : Session = Depends(get_db)):
     puzzleday = datetime.datetime.now(datetime.timezone.utc).replace(
             hour=0, minute=0, second=0, microsecond=0)
     name, desc, unexp, urg, impe, unus, good = scamdle.getScamOfTheDayTemp(db, str(puzzleday)[0:10])
@@ -153,6 +173,7 @@ def get_daily_scam(db : Session = Depends(get_db)):
         "unusualPayment" : unus,
         "toogood" : good
     }
+    '''
     
 @app.post("/api/login")
 def login(form_data : Annotated[OAuth2PasswordRequestForm, Depends()], db : Session = Depends(get_db)):
