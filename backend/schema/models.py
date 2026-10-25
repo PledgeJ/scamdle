@@ -125,3 +125,29 @@ class Sms(Base):
     message: Mapped[str] = mapped_column(
         Text
     )
+
+
+class Scamdle(Base):
+    __tablename__ = "scamdle"
+
+    name : Mapped[str] = mapped_column(
+        Text
+    )
+    desc : Mapped[str] = mapped_column(
+        Text
+    )
+    unexpected = Mapped[bool] = mapped_column(
+        Boolean
+    )
+    urgency = Mapped[bool] = mapped_column(
+        Boolean
+    )
+    impersonation = Mapped[bool] = mapped_column(
+        Boolean
+    )
+    unusualpayment = Mapped[bool] = mapped_column(
+        Boolean
+    )
+    toogood = Mapped[bool] = mapped_column(
+        Boolean
+    )
