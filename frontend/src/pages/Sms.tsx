@@ -69,19 +69,19 @@ export function SMS(): React.JSX.Element {
   if (isLoading || !data || error) {
     return (
     <Bars title="SMS Sort" size={{ h: 780, w: 600 }}>
-      <Box sx={{ mt: 5, height: 620, overflowY: 'auto' }}>
-          {error && <>
-            <MessageBubble message={"There's been an error loading the game"} />
-            <MessageBubble right message={"What's the error?"} />
-            <MessageBubble message={error}/>
-            <MessageBubble right message={"Uh oh"}/>
-          </>}
+      <Box sx={{ m: 1, p:2, height: 650, overflowY: 'auto', boxShadow: '1px 1px 0px #808080 inset, -1px -1px 0px #ffffff inset'}}>
+        {error && <>
+          <MessageBubble message={"There's been an error loading the game"} />
+          <MessageBubble right message={"What's the error?"} />
+          <MessageBubble message={error}/>
+          <MessageBubble right message={"Uh oh"}/>
+        </>}
 
-          {isLoading && <>
-            <MessageBubble message={"The game is taking a long time to load huh"} />
-            <MessageBubble right message={"Yeah I have slow internet"} />
-            <MessageBubble message={"You should probably look at that"} />
-          </>}
+        {isLoading && <>
+          <MessageBubble message={"The game is taking a long time to load huh"} />
+          <MessageBubble right message={"Yeah I have slow internet"} />
+          <MessageBubble message={"You should probably look at that"} />
+        </>}
       </Box>
 
       {/*  Buttons */}
@@ -131,7 +131,7 @@ export function SMS(): React.JSX.Element {
 
   return (
     <Bars title="SMS Sort" size={{ h: 780, w: 600 }}>
-      <Box sx={{ mb: 2, height: 650, overflowY: 'auto' }}>
+      <Box sx={{ m:1, p:2, mb: 2.5, height: 640, overflowY: 'auto', boxShadow: '1px 1px 0px #808080 inset, -1px -1px 0px #ffffff inset' }}>
         
         {/* Round 1 */}
         {data.textData[0] && (

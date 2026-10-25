@@ -1,0 +1,23 @@
+export const SCAMS = [
+    "Payment scams",
+    "Tech support scams",
+    "Employment scams",
+    "Impersonation scams",
+    "Fake rental",
+    "QR code scams",
+    "Fake websites",
+    "Overpayment scams",
+    "Check cashing",
+    "Romance scams",
+    "Charity scams",
+    "Debt relief",
+    "FTC / IRS scams",
+    "Investment scams",
+    "Lottery scams",
+    "Grandparent scam",
+    "Puppy scam",
+    "Online Merchant/Marketplace Scams",
+    "Mortgage closing",
+    "Business email compromise scams",
+    "Compromised card scam"
+]

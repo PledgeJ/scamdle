@@ -49,7 +49,7 @@ export function Bars({
         bgcolor: pinkMode ? '#edc9d7': '',
       }}
     >
-      {(showLogin && page == '/') && (
+      {(showLogin) && (
         <Draggable nodeRef={draggableNodeRef1} bounds="body" cancel=".no-drag">
           <Box 
             ref={draggableNodeRef1}
@@ -79,13 +79,13 @@ export function Bars({
       {/* Header */}
       <Box
         sx={{
-          gridArea: 'header',
-          display: 'flex', alignItems: 'center', justifyContent: 'right',
+          gridArea: 'main',
+          display: 'flex', alignItems: 'center', justifyContent: 'right', color: '#848484', opacity: 0.4,
           zIndex: (theme) => theme.zIndex.drawer + 1,
           bgcolor: 'transparent', border: 'none'
         }}
       >
-        <Typography variant="h1" sx={{ fontSize: '3rem', mr: 3 }}>Scamdle</Typography>
+        <Typography variant="h1" sx={{ fontSize: 400, mr: 3 }}>Scamdle</Typography>
       </Box>
 
       {/* Sidebar */}
